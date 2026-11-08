@@ -1,22 +1,6 @@
-<main class="min-h-screen bg-slate-950 flex items-center justify-center">
-  <div class="text-center">
-    <h1 class="text-5xl font-bold text-white">Frontend is ready!</h1>
-
-    <p class="mt-4 text-lg text-slate-400">Angular + Tailwind CSS</p>
-
-    <button
-      type="button"
-      (click)="sayHello()"
-      [disabled]="loading()"
-      class="mt-8 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-500 disabled:opacity-50"
-    >
-      {{ loading() ? 'Loading...' : 'Say Hello' }}
-    </button>
-
-    @if (message()) {
-      <p class="mt-6 text-xl text-green-400" role="status">
-        {{ message() }}
-      </p>
-    }
-  </div>
+<header class="min-h-header flex gap-2 items-center border-b drop-shadow-md">
+  <span>PRIMER</span>
+</header>
+<main class="p-4">
+  <router-outlet />
 </main>
