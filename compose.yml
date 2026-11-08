@@ -46,7 +46,7 @@ services:
       - -c
       - |
         npm ci
-        exec npx ng serve --host 0.0.0.0 --proxy-config proxy.docker.conf.json
+        exec npx ng serve --poll 1000 --host 0.0.0.0 --proxy-config proxy.docker.conf.json
     volumes:
       - ./frontend:/app
       - frontend_node_modules:/app/node_modules
