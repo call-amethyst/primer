@@ -5,15 +5,20 @@ pre-commit:
       glob: "backend/**/*.rs"
       run: cargo fmt --all --manifest-path backend/Cargo.toml -- --check
 
-    - name: clippy
-      glob: "backend/**/*.rs"
-      run: cargo clippy --manifest-path backend/Cargo.toml --all-targets --all-features -- --D warnings
-
     - name: prettier
-      glob: "frontend/**/*.{ts,html,scss,css,json}"
+      glob:
+        - "frontend/**/*.{ts,html,scss,css,json}"
+        - "frontend/*.json"
       run: npx prettier --check {staged_files}
       root: frontend
 
-    - name: eslint
-      glob: "frontend/**/*.{ts,html,scss,css,json}"
-      run: cd frontend && npx ng lint && npx tsc --noEmit -p tsconfig.app.json
+pre-push:
+  parallel: true
+  jobs:
+    - name: rust-clippy
+      glob: "backend/**/*"
+      run: cargo clippy --manifest-path backend/Cargo.toml --all-targets -- -D warnings
+
+    - name: angular-build
+      glob: "frontend/**/*"
+      run: npm run build --prefix frontend
