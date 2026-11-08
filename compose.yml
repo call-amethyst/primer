@@ -1,0 +1,70 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: devpassword
+      POSTGRES_DB: app
+    ports:
+      - "0.0.0.0:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 3s
+
+      retries: 10
+
+  api:
+    image: rust:1-bookworm
+    working_dir: /app
+    command: cargo run --locked
+    environment:
+      DATABASE_URL: postgres://app:devpassword@db:5432/app
+      RUST_LOG: info
+    volumes:
+      - ./backend:/app
+
+      - cargo_registry:/usr/local/cargo/registry
+      - cargo_target:/app/target
+
+    ports:
+      - "0.0.0.0:3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    image: node:24-alpine
+    working_dir: /app
+    command:
+      - sh
+      - -c
+      - |
+        npm ci
+        exec npx ng serve --host 0.0.0.0 --proxy-config proxy.docker.conf.json
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    ports:
+      - "127.0.0.1:4200:4200"
+    depends_on:
+      - api
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:4200/').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 5s
+      timeout: 3s
+      retries: 15
+      start_period: 30s
+
+volumes:
+  postgres_data:
+  cargo_registry:
+  cargo_target:
+  frontend_node_modules:
