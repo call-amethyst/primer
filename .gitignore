@@ -1,0 +1,24 @@
+# Rust
+backend/target/
+**/*.rs.bk
+
+# Angular / Node
+**/node_modules/
+**/dist/
+**/.angular/
+**/coverage/
+
+# Environment variables / secrets
+.env
+.env.*
+
+!.env.example
+
+# Editor and OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+
+# Temporary files
+*.logtarget
