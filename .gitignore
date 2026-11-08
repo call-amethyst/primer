@@ -20,5 +20,8 @@ backend/target/
 !.vscode/extensions.json
 .DS_Store
 
+# Lefthook local config
+lefthook-local.yml
+
 # Temporary files
 *.logtarget

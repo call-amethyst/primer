@@ -18,15 +18,17 @@ services:
       retries: 10
 
   api:
-    image: rust:1-bookworm
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+
+    init: true
     working_dir: /app
-    command: cargo run --locked
     environment:
       DATABASE_URL: postgres://app:devpassword@db:5432/app
       RUST_LOG: info
     volumes:
       - ./backend:/app
-
       - cargo_registry:/usr/local/cargo/registry
       - cargo_target:/app/target
 
