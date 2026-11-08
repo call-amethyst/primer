@@ -5,7 +5,7 @@ import { Component, signal } from '@angular/core';
   imports: [],
 
   templateUrl: './app.html',
-  styleUrl: './app.css',
+  styleUrl: './app.scss',
 })
 export class App {
   message = signal('');
