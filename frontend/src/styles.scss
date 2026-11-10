@@ -1,7 +1,51 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import url('https://fonts.googleapis.com/css2?family=Coiny&display=swap');
 @import 'tailwindcss';
 
 @theme {
-  --spacing-header: 3rem;
+  --spacing-header: 5rem;
+  --font-coiny: 'Coiny', system-ui;
+
+  --color-header: var(--color-aero-sky-700);
+  --color-primary: var(--color-aero-sky-700);
+
+  --color-aero-mist: #f4fbff;
+  --color-aero-sky-100: #eaf8ff;
+  --color-aero-sky-200: #cceeff;
+  --color-aero-sky-300: #a3def7;
+  --color-aero-sky-400: #76c9ed;
+  --color-aero-sky-600: #2196c7;
+  --color-aero-sky-700: #126b9e;
+  --color-aero-sky-900: #123c5a;
+
+  --color-aero-leaf-100: #edf9dc;
+  --color-aero-leaf-300: #bce77b;
+  --color-aero-leaf-500: #75c94c;
+  --color-aero-leaf-700: #3f8f3d;
+
+  --color-aero-glass: #ffffff;
+  --color-aero-glass-border: #b6e2f3;
+  --color-aero-text: #173b50;
+  --color-aero-text-muted: #55788b;
+  --color-aero-sunlight: #ffc857;
+}
+
+body {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  background-color: var(--color-aero-sky-400);
+  font-family: var(--font-coiny);
+  color: var(--color-primary);
+}
+
+body::before {
+  position: fixed;
+  z-index: -1;
+  inset: 42% 0 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 600' preserveAspectRatio='none'%3E%3Cpath fill='%23cceeff' fill-opacity='.5' d='M0 180C180 100 300 260 500 190S820 50 1020 140s260 80 420-10v470H0z'/%3E%3C/svg%3E")
+    center / 100% 100% no-repeat;
+  content: '';
+  pointer-events: none;
 }
