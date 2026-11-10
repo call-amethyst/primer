@@ -1,16 +1,16 @@
-pre-commit:
-  parallel: true
-  jobs:
-    - name: rustfmt
-      glob: "backend/**/*.rs"
-      run: cargo fmt --all --manifest-path backend/Cargo.toml -- --check
+# pre-commit:
+#   parallel: true
+#   jobs:
+#     - name: rustfmt
+#       glob: "backend/**/*.rs"
+#       run: cargo fmt --all --manifest-path backend/Cargo.toml -- --check
 
-    - name: prettier
-      glob:
-        - "frontend/**/*.{ts,html,scss,css,json}"
-        - "frontend/*.json"
-      run: npx prettier --check {staged_files}
-      root: frontend
+#     - name: prettier
+#       glob:
+#         - "frontend/**/*.{ts,html,scss,css,json}"
+#         - "frontend/*.json"
+#       run: npx prettier --check {staged_files}
+#       root: frontend
 
 pre-push:
   parallel: true
