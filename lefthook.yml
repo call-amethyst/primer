@@ -1,24 +1,15 @@
-# pre-commit:
-#   parallel: true
-#   jobs:
-#     - name: rustfmt
-#       glob: "backend/**/*.rs"
-#       run: cargo fmt --all --manifest-path backend/Cargo.toml -- --check
-
-#     - name: prettier
-#       glob:
-#         - "frontend/**/*.{ts,html,scss,css,json}"
-#         - "frontend/*.json"
-#       run: npx prettier --check {staged_files}
-#       root: frontend
-
 pre-push:
   parallel: true
   jobs:
     - name: rust-clippy
       glob: "backend/**/*"
       run: cargo clippy --manifest-path backend/Cargo.toml --all-targets -- -D warnings
-
+    - name: prettier
+      glob:
+        - "frontend/**/*.{ts,html,scss,css,json}"
+        - "frontend/*.json"
+      run: npx prettier --write {staged_files}
+      root: frontend  
     - name: angular-build
       glob: "frontend/**/*"
       run: npm run build --prefix frontend
