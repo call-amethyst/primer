@@ -1,17 +1,21 @@
 pub mod auth;
 pub mod db;
 pub mod error;
+pub mod openapi;
 pub mod user;
 
-use axum::{
-    Router,
-    routing::{get, post},
-};
 use color_eyre::eyre::{Context, Result};
 use sqlx::PgPool;
+use utoipa::OpenApi;
+use utoipa_axum::{router::OpenApiRouter, routes};
+use utoipa_swagger_ui::SwaggerUi;
 
 use crate::{
-    auth::{login::login, sessions::SessionRepository},
+    auth::{
+        login::{__path_login, login},
+        sessions::SessionRepository,
+    },
+    openapi::ApiDoc,
     user::UserRepository,
 };
 
@@ -30,12 +34,21 @@ async fn main() -> Result<()> {
         users: UserRepository::new(pool),
         sessions: SessionRepository::new(pool),
     };
-    let auth = Router::new().route("/login", post(login));
-    let api = Router::new()
-        .nest("/auth", auth)
-        .route("/hello", get(hello));
+    let auth = OpenApiRouter::new().routes(routes!(login));
 
-    let app = Router::new().nest("/api", api).with_state(app_state);
+    let api = OpenApiRouter::new()
+        .nest("/auth", auth)
+        .routes(routes!(hello));
+
+    let app = OpenApiRouter::with_openapi(ApiDoc::openapi()).nest("/api", api);
+
+    // Extract the Axum router and generated OpenAPI specification
+    let (app, openapi) = app.split_for_parts();
+
+    #[cfg(debug_assertions)]
+    let app = app.merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", openapi));
+
+    let app = app.with_state(app_state);
     // run our app with hyper, listening globally on port 3000
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
         .await
@@ -46,7 +59,14 @@ async fn main() -> Result<()> {
     Ok(())
 }
 
-// basic handler that responds with a static string
+#[utoipa::path(
+    get,
+    path = "/hello",
+    tag = "General",
+    responses(
+        (status = 200, description = "Hello response", body = String)
+    )
+)]
 async fn hello() -> &'static str {
-    "Hello World from the backend!"
+    "Hello, world!"
 }
