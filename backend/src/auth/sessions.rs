@@ -31,9 +31,9 @@ impl Token {
     }
 
     #[must_use]
-    pub fn from_base_64(value: String) -> Option<Self> {
+    pub fn from_base_64(value: &str) -> Option<Self> {
         base64::engine::general_purpose::URL_SAFE_NO_PAD
-            .decode(&value)
+            .decode(value)
             .ok()
             .and_then(|value| value.try_into().ok())
             .map(Token)

@@ -17,7 +17,7 @@ impl FromRequestParts<AppState> for AuthenticatedUser {
         if let Some(auth) = parts.headers.get(AUTHORIZATION) {
             let token = extract_bearer_token(auth.to_str().map_err(|_| Error::Unauthorized)?)
                 .ok_or(Error::Unauthorized)?;
-            let token = Token::from_base_64(token.to_string()).ok_or(Error::Unauthorized)?;
+            let token = Token::from_base_64(token).ok_or(Error::Unauthorized)?;
             state.sessions.user(&token).await.map(AuthenticatedUser)
         } else {
             Err(Error::Unauthorized)

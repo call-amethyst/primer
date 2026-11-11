@@ -35,8 +35,7 @@ impl From<sqlx::error::Error> for Error {
     fn from(value: sqlx::error::Error) -> Self {
         if value
             .as_database_error()
-            .map(DatabaseError::is_unique_violation)
-            .unwrap_or(false)
+            .is_some_and(DatabaseError::is_unique_violation)
         {
             Self::Duplicate
         } else {

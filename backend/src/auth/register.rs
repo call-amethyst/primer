@@ -48,7 +48,7 @@ pub(crate) async fn register(
 ) -> Result<impl IntoResponse, Error> {
     let argon2 = Argon2::default();
     let password_hash = argon2
-        .hash_password(&request.password.as_bytes())
+        .hash_password(request.password.as_bytes())
         .map_err(|_| Error::BadRequest)?
         .to_string();
     let user = User {

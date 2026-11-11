@@ -97,7 +97,7 @@ pub(crate) async fn refresh(
             sessions.access_expires_at,
             sessions.access_token_hash,
             sessions.refresh_token_hash",
-        &Token::from_base_64(request.refresh_token)
+        &Token::from_base_64(&request.refresh_token)
             .ok_or(Error::Unauthorized)?
             .hash(),
         &request.riot_name,

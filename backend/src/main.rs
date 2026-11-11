@@ -10,6 +10,7 @@ use utoipa::OpenApi;
 use utoipa_axum::{router::OpenApiRouter, routes};
 use utoipa_swagger_ui::SwaggerUi;
 
+#[allow(clippy::wildcard_imports)]
 use crate::{
     auth::{
         extractor::AuthenticatedUser, login::*, refresh::*, register::*,
