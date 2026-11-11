@@ -1,6 +1,5 @@
 use base64::Engine;
 use chrono::{DateTime, Duration, Utc};
-use serde::Serialize;
 use sha2::{Digest, Sha256};
 use sqlx::{PgPool, postgres::types::PgInterval, query_as};
 use uuid::Uuid;
@@ -43,7 +42,6 @@ impl Token {
 }
 
 #[non_exhaustive]
-#[derive(Serialize)]
 pub struct Session {
     pub id: Uuid,
 

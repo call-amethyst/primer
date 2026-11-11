@@ -1,7 +1,8 @@
 use argon2::{Argon2, PasswordHash, PasswordVerifier};
 use axum::{Json, extract::State, response::IntoResponse};
-use chrono::Duration;
-use serde::Deserialize;
+use chrono::{DateTime, Duration, Utc};
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 use crate::{AppState, auth::sessions::TokenPair, error::Error};
 
@@ -9,6 +10,19 @@ use crate::{AppState, auth::sessions::TokenPair, error::Error};
 pub(crate) struct LoginRequest {
     riot_name: String,
     password: String,
+}
+
+#[derive(Serialize)]
+pub(crate) struct LoginResponse {
+    pub id: Uuid,
+
+    pub created_at: DateTime<Utc>,
+    pub refreshed_at: DateTime<Utc>,
+    pub expires_at: DateTime<Utc>,
+    pub access_expires_at: DateTime<Utc>,
+
+    pub access_token: String,
+    pub refresh_token: String,
 }
 
 pub(crate) async fn login(
@@ -37,5 +51,18 @@ pub(crate) async fn login(
         .sessions
         .create(Duration::days(30), Duration::hours(1), &tokens)
         .await?;
-    Ok(Json(session))
+
+    // Prepare response
+    let response = LoginResponse {
+        id: session.id,
+
+        created_at: session.created_at,
+        refreshed_at: session.refreshed_at,
+        expires_at: session.expires_at,
+        access_expires_at: session.access_expires_at,
+
+        access_token: tokens.access.base_64(),
+        refresh_token: tokens.refresh.base_64(),
+    };
+    Ok(Json(response))
 }

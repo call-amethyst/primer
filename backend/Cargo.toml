@@ -16,6 +16,8 @@ sqlx = { version = "0.9.0", features = ["runtime-tokio", "tls-native-tls", "post
 thiserror = "2.0.21"
 tokio = { version = "1.54.1", features = ["macros", "rt-multi-thread"] }
 uuid = { version = "1.29.1", features = ["v4", "serde"] }
+utoipa = { version = "6", features = ["chrono", "uuid"] }
+utoipa-swagger-ui = { version = "10.0.2", features = ["axum", "vendored"] }
 
 [lints.clippy]
 pedantic = { level = "deny", priority = -1 }   # UM, ACTUALLY
