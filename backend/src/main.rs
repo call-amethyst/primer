@@ -11,7 +11,10 @@ use utoipa_axum::{router::OpenApiRouter, routes};
 use utoipa_swagger_ui::SwaggerUi;
 
 use crate::{
-    auth::{login::*, refresh::*, register::*, sessions::SessionRepository},
+    auth::{
+        extractor::AuthenticatedUser, login::*, refresh::*, register::*,
+        sessions::SessionRepository,
+    },
     openapi::ApiDoc,
     user::UserRepository,
 };
@@ -69,6 +72,6 @@ async fn main() -> Result<()> {
         (status = 200, description = "Hello response", body = String)
     )
 )]
-async fn hello() -> &'static str {
-    "Hello, world!"
+async fn hello(AuthenticatedUser(user): AuthenticatedUser) -> String {
+    format!("Hello {}!", user.name)
 }

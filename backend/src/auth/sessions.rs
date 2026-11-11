@@ -101,6 +101,23 @@ impl SessionRepository {
         Ok(session)
     }
 
+    pub async fn user(&self, token: &Token) -> Result<User, Error> {
+        query_as!(
+            User,
+            "SELECT users.id, users.name, users.riot_name, users.password_hash 
+            FROM users 
+            JOIN sessions 
+            ON sessions.user_id=users.id
+            WHERE sessions.access_token_hash=$1
+            AND expires_at > now()
+            AND revoked_at IS NULL",
+            &token.hash()
+        )
+        .fetch_optional(self.pool)
+        .await?
+        .ok_or(Error::NotFound)
+    }
+
     pub async fn sessions(&self, user: &User) -> Result<Vec<Session>, Error> {
         let sessions = query_as!(
             Session,
