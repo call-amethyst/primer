@@ -1,0 +1,110 @@
+use base64::Engine;
+use chrono::{DateTime, Duration, Utc};
+use serde::Serialize;
+use sha2::{Digest, Sha256};
+use sqlx::{PgPool, postgres::types::PgInterval, query_as};
+use uuid::Uuid;
+
+use crate::{error::Error, user::User};
+
+#[non_exhaustive]
+pub struct TokenPair {
+    pub access: Token,
+    pub refresh: Token,
+}
+
+impl TokenPair {
+    #[must_use]
+    pub fn random() -> Self {
+        Self {
+            access: Token::random(),
+            refresh: Token::random(),
+        }
+    }
+}
+
+pub struct Token(pub [u8; 32]);
+
+impl Token {
+    #[must_use]
+    pub fn random() -> Self {
+        Self(rand::random())
+    }
+
+    #[must_use]
+    pub fn hash(&self) -> [u8; 32] {
+        Sha256::digest(self.0).into()
+    }
+
+    #[must_use]
+    pub fn base_64(&self) -> String {
+        base64::engine::general_purpose::URL_SAFE_NO_PAD.encode(self.0)
+    }
+}
+
+#[non_exhaustive]
+#[derive(Serialize)]
+pub struct Session {
+    pub id: Uuid,
+
+    pub created_at: DateTime<Utc>,
+    pub refreshed_at: DateTime<Utc>,
+    pub expires_at: DateTime<Utc>,
+    pub access_expires_at: DateTime<Utc>,
+
+    pub access_token_hash: Vec<u8>,
+    pub refresh_token_hash: Vec<u8>,
+}
+
+#[derive(Clone)]
+pub(crate) struct SessionRepository {
+    pool: &'static PgPool,
+}
+
+impl SessionRepository {
+    #[must_use]
+    pub const fn new(pool: &'static PgPool) -> Self {
+        Self { pool }
+    }
+
+    pub async fn create(
+        &self,
+        session_validity: Duration,
+        refresh_validity: Duration,
+        tokens: &TokenPair,
+    ) -> Result<Session, Error> {
+        let session = query_as!(
+            Session,
+            "INSERT INTO sessions 
+                        (expires_at, access_expires_at, 
+                        access_token_hash, refresh_token_hash) 
+            VALUES (now() + $1, now() + $2, $3, $4)
+            RETURNING id, created_at, refreshed_at, 
+                        expires_at, access_expires_at, 
+                        access_token_hash, refresh_token_hash",
+            PgInterval::try_from(session_validity).ok(),
+            PgInterval::try_from(refresh_validity).ok(),
+            &tokens.access.hash(),
+            &tokens.refresh.hash(),
+        )
+        .fetch_one(self.pool)
+        .await?;
+        Ok(session)
+    }
+
+    pub async fn sessions(&self, user: &User) -> Result<Vec<Session>, Error> {
+        let sessions = query_as!(
+            Session,
+            "SELECT id, created_at, refreshed_at, 
+                    expires_at, access_expires_at, 
+                    access_token_hash, refresh_token_hash
+            FROM sessions
+            WHERE user_id=$1
+            ",
+            user.id
+        )
+        .fetch_all(self.pool)
+        .await?;
+        Ok(sessions)
+    }
+}
