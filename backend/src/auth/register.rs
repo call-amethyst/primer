@@ -11,6 +11,8 @@ pub(crate) struct RegisterRequest {
     id: Uuid,
     name: String,
     riot_name: String,
+
+    #[schema(format = Password)]
     password: String,
 }
 
