@@ -1,4 +1,4 @@
-use sqlx::{PgPool, query_as};
+use sqlx::{PgPool, query, query_as};
 use uuid::Uuid;
 
 use crate::error::Error;
@@ -19,6 +19,19 @@ impl UserRepository {
     #[must_use]
     pub const fn new(pool: &'static PgPool) -> Self {
         Self { pool }
+    }
+
+    pub async fn insert(&self, user: User) -> Result<(), Error> {
+        query!(
+            "INSERT INTO users (id, name, riot_name, password_hash) VALUES ($1, $2, $3, $4)",
+            user.id,
+            user.name,
+            user.riot_name,
+            user.password_hash
+        )
+        .execute(self.pool)
+        .await?;
+        Ok(())
     }
 
     pub async fn with_id(&self, id: &Uuid) -> Result<User, Error> {

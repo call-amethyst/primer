@@ -13,6 +13,7 @@ use utoipa_swagger_ui::SwaggerUi;
 use crate::{
     auth::{
         login::{__path_login, login},
+        register::{__path_register, register},
         sessions::SessionRepository,
     },
     openapi::ApiDoc,
@@ -34,7 +35,9 @@ async fn main() -> Result<()> {
         users: UserRepository::new(pool),
         sessions: SessionRepository::new(pool),
     };
-    let auth = OpenApiRouter::new().routes(routes!(login));
+    let auth = OpenApiRouter::new()
+        .routes(routes!(login))
+        .routes(routes!(register));
 
     let api = OpenApiRouter::new()
         .nest("/auth", auth)
