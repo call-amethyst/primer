@@ -91,7 +91,7 @@ pub(crate) async fn login(
     let tokens = TokenPair::random();
     let session = app_state
         .sessions
-        .create(Duration::days(30), Duration::hours(1), &tokens)
+        .create(&user, Duration::days(30), Duration::hours(1), &tokens)
         .await?;
 
     // Prepare response

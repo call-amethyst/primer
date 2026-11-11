@@ -11,11 +11,7 @@ use utoipa_axum::{router::OpenApiRouter, routes};
 use utoipa_swagger_ui::SwaggerUi;
 
 use crate::{
-    auth::{
-        login::{__path_login, login},
-        register::{__path_register, register},
-        sessions::SessionRepository,
-    },
+    auth::{login::*, refresh::*, register::*, sessions::SessionRepository},
     openapi::ApiDoc,
     user::UserRepository,
 };
@@ -24,6 +20,7 @@ use crate::{
 pub struct AppState {
     users: UserRepository,
     sessions: SessionRepository,
+    pool: &'static PgPool,
 }
 
 #[tokio::main]
@@ -34,10 +31,12 @@ async fn main() -> Result<()> {
     let app_state = AppState {
         users: UserRepository::new(pool),
         sessions: SessionRepository::new(pool),
+        pool,
     };
     let auth = OpenApiRouter::new()
         .routes(routes!(login))
-        .routes(routes!(register));
+        .routes(routes!(register))
+        .routes(routes!(refresh));
 
     let api = OpenApiRouter::new()
         .nest("/auth", auth)

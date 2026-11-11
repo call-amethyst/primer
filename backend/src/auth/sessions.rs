@@ -31,6 +31,15 @@ impl Token {
     }
 
     #[must_use]
+    pub fn from_base_64(value: String) -> Option<Self> {
+        base64::engine::general_purpose::URL_SAFE_NO_PAD
+            .decode(&value)
+            .ok()
+            .and_then(|value| value.try_into().ok())
+            .map(Token)
+    }
+
+    #[must_use]
     pub fn hash(&self) -> [u8; 32] {
         Sha256::digest(self.0).into()
     }
@@ -67,6 +76,7 @@ impl SessionRepository {
 
     pub async fn create(
         &self,
+        user: &User,
         session_validity: Duration,
         refresh_validity: Duration,
         tokens: &TokenPair,
@@ -74,12 +84,13 @@ impl SessionRepository {
         let session = query_as!(
             Session,
             "INSERT INTO sessions 
-                        (expires_at, access_expires_at, 
+                        (user_id, expires_at, access_expires_at, 
                         access_token_hash, refresh_token_hash) 
-            VALUES (now() + $1, now() + $2, $3, $4)
+            VALUES ($1, now() + $2, now() + $3, $4, $5)
             RETURNING id, created_at, refreshed_at, 
                         expires_at, access_expires_at, 
                         access_token_hash, refresh_token_hash",
+            user.id,
             PgInterval::try_from(session_validity).ok(),
             PgInterval::try_from(refresh_validity).ok(),
             &tokens.access.hash(),
