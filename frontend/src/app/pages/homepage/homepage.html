@@ -1,8 +1,8 @@
-<section class="pl-8 flex flex-col gap-0 items-center xl:flex-row xl:gap-4 xl:items-start">
+<section class="flex flex-col gap-0 items-center xl:flex-row xl:gap-12 xl:items-start">
   <img
     src="images/prime_sharks_logo.png"
     alt="Prime Sharks logo"
-    class="w-100 h-100 2xl:h-160 2xl:w-160 object-contain"
+    class="w-100 h-100 2xl:h-100 2xl:w-100 object-contain"
   />
   <div class="pt-2 xl:pt-30 flex flex-col">
     <h1
@@ -17,8 +17,12 @@
     </h2>
   </div>
 </section>
-<section class="grid grid-cols-3 gap-8">
-  <app-card title="Card 1">Test213</app-card>
-  <app-card title="Card 2"></app-card>
-  <app-card title="Card 3"></app-card>
+<section
+  class="grid grid-cols-1 justify-center gap-8 sm:grid-cols-2 lg:grid-cols-[repeat(3,minmax(0,30rem))]"
+>
+  <app-card class="w-full" title="Training">Test213</app-card>
+  <app-card class="w-full" title="Kalender">
+    <cal-month-view [events]="[]" [viewDate]="viewDate"></cal-month-view>
+  </app-card>
+  <app-card class="w-full" title="Teamcomp"></app-card>
 </section>

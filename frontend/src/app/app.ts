@@ -7,6 +7,9 @@ import { RouterOutlet } from '@angular/router';
 
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  host: {
+    class: 'flex flex-col items-center',
+  },
 })
 export class App {
   message = signal('');

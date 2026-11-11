@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { Card } from '../../components/card/card';
+import { CalMonthView } from '@ascentsparksoftware/angular-calendar';
 
 @Component({
-  imports: [Card],
+  imports: [Card, CalMonthView],
   selector: 'app-homepage',
   styleUrl: './homepage.scss',
   templateUrl: './homepage.html',
@@ -10,4 +11,6 @@ import { Card } from '../../components/card/card';
     class: 'flex flex-col gap-10',
   },
 })
-export class Homepage {}
+export class Homepage {
+  viewDate = new Date();
+}

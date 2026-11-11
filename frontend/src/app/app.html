@@ -1,8 +1,10 @@
 <header
-  class="px-4 pt-1 min-h-header flex gap-2 items-center border-b border-aero-glass-border/90 bg-linear-to-b from-aero-glass/75 via-aero-sky-100/60 to-aero-sky-200/40 text-aero-text backdrop-blur-xl backdrop-saturate-150 shadow-lg shadow-aero-sky-900/10"
+  class="px-4 pt-1 w-full min-h-header border-b border-aero-glass-border/90 bg-linear-to-b from-aero-glass/75 via-aero-sky-100/60 to-aero-sky-200/40 text-aero-text backdrop-blur-xl backdrop-saturate-150 shadow-lg shadow-aero-sky-900/10"
 >
-  <span class="text-header text-4xl">PRIMER</span>
+  <div class="max-w-content-width min-h-header mx-auto flex gap-2 items-center">
+    <span class="text-header text-4xl">PRIMER</span>
+  </div>
 </header>
-<main class="px-8 py-4">
+<main class="max-w-content-width px-8 pt-24 pb-4">
   <router-outlet />
 </main>
