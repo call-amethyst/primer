@@ -1,0 +1,5 @@
+[macros.type-overrides]
+
+'game_map' = "crate::ranking::model::Map"
+'agent' = "crate::ranking::model::Agent"
+'agent_rank' = "crate::ranking::model::Rank"
