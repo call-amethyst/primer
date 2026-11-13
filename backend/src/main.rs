@@ -2,6 +2,7 @@ pub mod auth;
 pub mod db;
 pub mod error;
 pub mod openapi;
+pub mod ranking;
 pub mod user;
 
 use color_eyre::eyre::{Context, Result};
@@ -10,6 +11,7 @@ use utoipa::OpenApi;
 use utoipa_axum::{router::OpenApiRouter, routes};
 use utoipa_swagger_ui::SwaggerUi;
 
+use crate::ranking::rankings::RankingRepository;
 #[allow(clippy::wildcard_imports)]
 use crate::{
     auth::{
@@ -24,6 +26,7 @@ use crate::{
 pub struct AppState {
     users: UserRepository,
     sessions: SessionRepository,
+    rankings: RankingRepository,
     pool: &'static PgPool,
 }
 
@@ -35,6 +38,7 @@ async fn main() -> Result<()> {
     let app_state = AppState {
         users: UserRepository::new(pool),
         sessions: SessionRepository::new(pool),
+        rankings: RankingRepository::new(pool),
         pool,
     };
     let auth = OpenApiRouter::new()
@@ -44,6 +48,7 @@ async fn main() -> Result<()> {
 
     let api = OpenApiRouter::new()
         .nest("/auth", auth)
+        .merge(ranking::get_router())
         .routes(routes!(hello));
 
     let app = OpenApiRouter::with_openapi(ApiDoc::openapi()).nest("/api", api);
