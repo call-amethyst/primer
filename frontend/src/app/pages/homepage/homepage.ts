@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { Card } from '../../components/card/card';
-import { CalMonthView } from '@ascentsparksoftware/angular-calendar';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { gameCalendar } from '@ng-icons/game-icons';
 
 @Component({
-  imports: [Card, CalMonthView],
+  imports: [Card, NgIcon],
+  providers: [provideIcons({ gameCalendar })],
   selector: 'app-homepage',
   styleUrl: './homepage.scss',
   templateUrl: './homepage.html',
@@ -11,6 +13,4 @@ import { CalMonthView } from '@ascentsparksoftware/angular-calendar';
     class: 'flex flex-col gap-10',
   },
 })
-export class Homepage {
-  viewDate = new Date();
-}
+export class Homepage {}
