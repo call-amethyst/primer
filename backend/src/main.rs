@@ -47,11 +47,12 @@ async fn main() -> Result<()> {
         .routes(routes!(refresh));
 
     let api = OpenApiRouter::new()
-        .nest("/auth", auth)
         .merge(ranking::get_router())
         .routes(routes!(hello));
 
-    let app = OpenApiRouter::with_openapi(ApiDoc::openapi()).nest("/api", api);
+    let app = OpenApiRouter::with_openapi(ApiDoc::openapi())
+        .nest("/api/v1", api)
+        .nest("/api/auth", auth);
 
     // Extract the Axum router and generated OpenAPI specification
     let (app, openapi) = app.split_for_parts();
