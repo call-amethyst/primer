@@ -17,7 +17,9 @@ pub(crate) struct LoginRequest {
 
 #[derive(Serialize, ToSchema)]
 pub(crate) struct LoginResponse {
-    pub id: Uuid,
+    pub session_id: Uuid,
+
+    pub user_id: Uuid,
 
     pub created_at: DateTime<Utc>,
 
@@ -45,7 +47,7 @@ pub(crate) struct LoginResponse {
     path = "/login",
     tag = "Authentication",
     summary = "Log in",
-    description = "Authenticates a user with their riot name and password. Creates a session and returns access and refresh tokens.",
+    description = "Authenticates a user with their user id and password. Creates a session and returns access and refresh tokens.",
     request_body = LoginRequest,
     responses(
         (
@@ -96,7 +98,8 @@ pub(crate) async fn login(
 
     // Prepare response
     let response = LoginResponse {
-        id: session.id,
+        session_id: session.id,
+        user_id: user.id,
 
         created_at: session.created_at,
         refreshed_at: session.refreshed_at,
