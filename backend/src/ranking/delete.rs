@@ -43,7 +43,7 @@ pub(crate) async fn delete_agent_ranking(
 /// Remove all rankings belonging to the authenticated user on a certain map.
 #[utoipa::path(
     delete,
-    path = "/users/{map}/me/rankings",
+    path = "/users/me/{map}/rankings",
     tag = "Rankings",
     security(("bearer_auth" = [])),
     responses(
