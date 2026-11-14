@@ -33,8 +33,10 @@ pub struct AppState {
 #[tokio::main]
 async fn main() -> Result<()> {
     color_eyre::install()?;
+
     let pool = db::connect().await?;
     let pool: &'static PgPool = Box::leak(Box::new(pool));
+    sqlx::migrate!("./migrations").run(pool).await?;
     let app_state = AppState {
         users: UserRepository::new(pool),
         sessions: SessionRepository::new(pool),
