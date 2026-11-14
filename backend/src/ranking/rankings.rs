@@ -1,4 +1,4 @@
-use sqlx::{PgPool, query_as};
+use sqlx::{PgPool, query, query_as};
 use uuid::Uuid;
 
 use crate::{
@@ -15,6 +15,26 @@ impl RankingRepository {
     #[must_use]
     pub const fn new(pool: &'static PgPool) -> Self {
         Self { pool }
+    }
+
+    pub async fn create_user_ranking(
+        &self,
+        user_id: &Uuid,
+        map: &Map,
+        ranking: &Ranking,
+    ) -> Result<(), Error> {
+        query!(
+            r#"
+            INSERT INTO rankings (user_id, map, agent, rank) VALUES ($1, $2, $3, $4)
+            "#,
+            user_id,
+            map,
+            ranking.agent,
+            ranking.rank
+        )
+        .execute(self.pool)
+        .await?;
+        Ok(())
     }
 
     pub async fn user_rankings(&self, user_id: &Uuid, map: &Map) -> Result<Vec<Ranking>, Error> {

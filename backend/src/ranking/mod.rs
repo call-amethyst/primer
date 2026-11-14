@@ -2,6 +2,7 @@ use utoipa_axum::{router::OpenApiRouter, routes};
 
 use crate::AppState;
 
+pub mod create;
 pub mod model;
 pub mod rankings;
 pub mod read;
@@ -15,4 +16,5 @@ pub fn get_router() -> OpenApiRouter<AppState> {
         .routes(routes!(read::get_user_rankings))
         .routes(routes!(read::get_my_agent_ranking))
         .routes(routes!(read::get_user_agent_ranking))
+        .routes(routes!(create::create_ranking))
 }

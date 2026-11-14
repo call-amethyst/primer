@@ -17,7 +17,7 @@ use crate::{
 /// List all available agents.
 #[utoipa::path(
     get,
-    path = "/api/v1/agents",
+    path = "/agents",
     tag = "Agents",
     responses(
         (status = 200, description = "Available agents",
@@ -33,7 +33,7 @@ pub(crate) async fn get_agents() -> Result<Json<AgentsResponse>, Error> {
 /// List all available ranks.
 #[utoipa::path(
     get,
-    path = "/api/v1/ranks",
+    path = "/ranks",
     tag = "Rankings",
     responses(
         (status = 200, description = "Available ranks",
@@ -49,7 +49,7 @@ pub(crate) async fn get_ranks() -> Result<Json<RanksResponse>, Error> {
 /// List all available maps.
 #[utoipa::path(
     get,
-    path = "/api/v1/maps",
+    path = "/maps",
     tag = "Maps",
     responses(
         (status = 200, description = "Available maps",
@@ -65,7 +65,7 @@ pub(crate) async fn get_maps() -> Result<Json<MapsResponse>, Error> {
 /// Get the authenticated user's rankings.
 #[utoipa::path(
     get,
-    path = "/api/v1/users/me/{map}/rankings",
+    path = "/users/me/{map}/rankings",
     tag = "Rankings",
     params(
         ("map" = Map, Path,
@@ -98,7 +98,7 @@ pub(crate) async fn get_my_rankings(
 /// Get another user's rankings.
 #[utoipa::path(
     get,
-    path = "/api/v1/users/{user_id}/{map}/rankings",
+    path = "/users/{user_id}/{map}/rankings",
     tag = "Rankings",
     params(
         ("map" = Map, Path,
@@ -129,7 +129,7 @@ pub(crate) async fn get_user_rankings(
 /// Get the authenticated user's ranking for one agent.
 #[utoipa::path(
     get,
-    path = "/api/v1/users/me/{map}/rankings/{agent}",
+    path = "/users/me/{map}/rankings/{agent}",
     tag = "Rankings",
     params(
         ("map" = Map, Path,
@@ -160,7 +160,7 @@ pub(crate) async fn get_my_agent_ranking(
 /// Get another user's ranking for one agent.
 #[utoipa::path(
     get,
-    path = "/api/v1/users/{user_id}/{map}/rankings/{agent}",
+    path = "/users/{user_id}/{map}/rankings/{agent}",
     tag = "Rankings",
     params(
         ("user_id" = Uuid, Path,
