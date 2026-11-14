@@ -21,7 +21,6 @@ pub enum Error {
 
 impl IntoResponse for Error {
     fn into_response(self) -> axum::response::Response {
-        dbg!(&self);
         match self {
             Self::Internal | Self::Database(_) => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
             Self::Unauthorized => StatusCode::UNAUTHORIZED.into_response(),
