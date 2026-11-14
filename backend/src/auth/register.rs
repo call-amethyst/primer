@@ -2,9 +2,8 @@ use argon2::{Argon2, PasswordHasher};
 use axum::{Json, extract::State, http::StatusCode, response::IntoResponse};
 use serde::Deserialize;
 use utoipa::ToSchema;
-use uuid::Uuid;
 
-use crate::{AppState, error::Error, user::User};
+use crate::{AppState, error::Error};
 
 #[derive(Deserialize, ToSchema)]
 pub(crate) struct RegisterRequest {
