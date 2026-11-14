@@ -21,13 +21,17 @@ impl UserRepository {
         Self { pool }
     }
 
-    pub async fn insert(&self, user: User) -> Result<(), Error> {
+    pub async fn insert(
+        &self,
+        name: &str,
+        riot_name: &str,
+        password_hash: &str,
+    ) -> Result<(), Error> {
         query!(
-            "INSERT INTO users (id, name, riot_name, password_hash) VALUES ($1, $2, $3, $4)",
-            user.id,
-            user.name,
-            user.riot_name,
-            user.password_hash
+            "INSERT INTO users (name, riot_name, password_hash) VALUES ($1, $2, $3)",
+            name,
+            riot_name,
+            password_hash
         )
         .execute(self.pool)
         .await?;

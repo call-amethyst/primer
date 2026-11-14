@@ -14,12 +14,13 @@ use utoipa::ToSchema;
 #[derive(Deserialize, ToSchema)]
 pub(crate) struct RefreshRequest {
     refresh_token: String,
-    riot_name: String,
+    user_id: Uuid,
 }
 
 #[derive(Serialize, ToSchema)]
 pub(crate) struct RefreshResponse {
-    pub id: Uuid,
+    pub session_id: Uuid,
+    pub user_id: Uuid,
 
     pub created_at: DateTime<Utc>,
 
@@ -82,25 +83,23 @@ pub(crate) async fn refresh(
             refresh_token_hash = $4,
             refreshed_at = now(),
             access_expires_at = now() + $5
-        FROM users
         WHERE
-            users.riot_name = $2
-            AND sessions.user_id = users.id
-            AND sessions.refresh_token_hash = $1
+            user_id = $2
+            AND refresh_token_hash = $1
             AND expires_at > now()
             AND revoked_at IS NULL
         RETURNING
-            sessions.id,
-            sessions.created_at,
-            sessions.refreshed_at,
-            sessions.expires_at,
-            sessions.access_expires_at,
-            sessions.access_token_hash,
-            sessions.refresh_token_hash",
+            id,
+            created_at,
+            refreshed_at,
+            expires_at,
+            access_expires_at,
+            access_token_hash,
+            refresh_token_hash",
         &Token::from_base_64(&request.refresh_token)
             .ok_or(Error::Unauthorized)?
             .hash(),
-        &request.riot_name,
+        &request.user_id,
         &tokens.access.hash(),
         &tokens.refresh.hash(),
         PgInterval::try_from(Duration::hours(1)).map_err(|_| Error::Internal)?,
@@ -111,7 +110,8 @@ pub(crate) async fn refresh(
 
     // Prepare response
     let response = RefreshResponse {
-        id: session.id,
+        session_id: session.id,
+        user_id: request.user_id,
 
         created_at: session.created_at,
         refreshed_at: session.refreshed_at,

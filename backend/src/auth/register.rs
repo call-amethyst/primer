@@ -8,7 +8,6 @@ use crate::{AppState, error::Error, user::User};
 
 #[derive(Deserialize, ToSchema)]
 pub(crate) struct RegisterRequest {
-    id: Uuid,
     name: String,
     riot_name: String,
 
@@ -51,13 +50,10 @@ pub(crate) async fn register(
         .hash_password(request.password.as_bytes())
         .map_err(|_| Error::BadRequest)?
         .to_string();
-    let user = User {
-        id: request.id,
-        name: request.name,
-        riot_name: request.riot_name,
-        password_hash,
-    };
 
-    app_state.users.insert(user).await?;
+    app_state
+        .users
+        .insert(&request.name, &request.riot_name, &password_hash)
+        .await?;
     Ok(StatusCode::NO_CONTENT)
 }
