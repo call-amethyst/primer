@@ -1,0 +1,54 @@
+<app-card [title]="register() ? 'Register' : 'Login'">
+  @if (register()) {
+    <form class="flex flex-col gap-4">
+      <div class="flex flex-col">
+        <input type="text" placeholder="Username" [formField]="registerForm.username" />
+        @if (registerForm.username().touched() && registerForm.username().invalid()) {
+          @for (error of registerForm.username().errors(); track error.kind) {
+            <span class="input-error-text">{{ error.message }}</span>
+          }
+        }
+      </div>
+      <input type="password" placeholder="Password" [formField]="registerForm.password" />
+      @if (registerForm.password().touched() && registerForm.password().invalid()) {
+        @for (error of registerForm.password().errors(); track error.kind) {
+          <span class="input-error-text">{{ error.message }}</span>
+        }
+      }
+      <input
+        type="password"
+        placeholder="Confirm Password"
+        [formField]="registerForm.confirmPassword"
+      />
+      @if (registerForm.confirmPassword().touched() && registerForm.confirmPassword().invalid()) {
+        @for (error of registerForm.confirmPassword().errors(); track error.kind) {
+          <span class="input-error-text">{{ error.message }}</span>
+        }
+      }
+      <button
+        type="submit"
+        class="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200"
+      >
+        Register
+      </button>
+    </form>
+  } @else {
+    <form class="flex flex-col gap-4">
+      <input type="text" autocomplete="username" placeholder="Username" />
+      <input type="password" placeholder="Password" />
+      <button
+        type="submit"
+        class="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200"
+      >
+        Login
+      </button>
+    </form>
+  }
+  <a
+    class="pt-2 text-aero-sky-500 hover:underline hover:cursor-pointer"
+    routerLink="/login"
+    [queryParams]="!register() ? { register: true } : null"
+    queryParamsHandling="replace"
+    >{{ register() ? 'To Login' : 'To Register' }}</a
+  >
+</app-card>
