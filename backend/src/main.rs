@@ -2,6 +2,7 @@ pub mod auth;
 pub mod db;
 pub mod error;
 pub mod openapi;
+pub mod ranking;
 pub mod user;
 
 use color_eyre::eyre::{Context, Result};
@@ -10,6 +11,7 @@ use utoipa::OpenApi;
 use utoipa_axum::{router::OpenApiRouter, routes};
 use utoipa_swagger_ui::SwaggerUi;
 
+use crate::ranking::rankings::RankingRepository;
 #[allow(clippy::wildcard_imports)]
 use crate::{
     auth::{
@@ -24,17 +26,21 @@ use crate::{
 pub struct AppState {
     users: UserRepository,
     sessions: SessionRepository,
+    rankings: RankingRepository,
     pool: &'static PgPool,
 }
 
 #[tokio::main]
 async fn main() -> Result<()> {
     color_eyre::install()?;
+
     let pool = db::connect().await?;
     let pool: &'static PgPool = Box::leak(Box::new(pool));
+    sqlx::migrate!("./migrations").run(pool).await?;
     let app_state = AppState {
         users: UserRepository::new(pool),
         sessions: SessionRepository::new(pool),
+        rankings: RankingRepository::new(pool),
         pool,
     };
     let auth = OpenApiRouter::new()
@@ -43,10 +49,12 @@ async fn main() -> Result<()> {
         .routes(routes!(refresh));
 
     let api = OpenApiRouter::new()
-        .nest("/auth", auth)
+        .merge(ranking::get_router())
         .routes(routes!(hello));
 
-    let app = OpenApiRouter::with_openapi(ApiDoc::openapi()).nest("/api", api);
+    let app = OpenApiRouter::with_openapi(ApiDoc::openapi())
+        .nest("/api/v1", api)
+        .nest("/api/auth", auth);
 
     // Extract the Axum router and generated OpenAPI specification
     let (app, openapi) = app.split_for_parts();

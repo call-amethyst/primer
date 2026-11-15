@@ -8,8 +8,8 @@ use utoipa::openapi::security::{HttpAuthScheme, HttpBuilder, SecurityScheme};
         title = "Primer API",
         version = "0.1.0",
         description = "REST API for primer.",
-    ), 
-    modifiers(&SecurityAddon), 
+    ),
+    modifiers(&SecurityAddon),
     security(
         ("bearer_auth" = [])
     )
