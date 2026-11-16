@@ -1,0 +1,113 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT agent, rank\n        FROM rankings\n        WHERE user_id = $1 AND map = $2\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "agent",
+        "type_info": {
+          "Custom": {
+            "name": "agent",
+            "kind": {
+              "Enum": [
+                "ASTRA",
+                "BREACH",
+                "BRIMSTONE",
+                "CHAMBER",
+                "CLOVE",
+                "CYPHER",
+                "DEADLOCK",
+                "FADE",
+                "GEKKO",
+                "HARBOR",
+                "HUSH",
+                "ISO",
+                "JETT",
+                "KAYO",
+                "KILLJOY",
+                "MIKS",
+                "NEON",
+                "OMEN",
+                "PHOENIX",
+                "RAZE",
+                "REYNA",
+                "SAGE",
+                "SKYE",
+                "SOVA",
+                "TEJO",
+                "VETO",
+                "VIPER",
+                "VYSE",
+                "WAYLAY",
+                "YORU"
+              ]
+            }
+          }
+        },
+        "origin": {
+          "Table": {
+            "table": "rankings",
+            "name": "agent"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "rank",
+        "type_info": {
+          "Custom": {
+            "name": "agent_rank",
+            "kind": {
+              "Enum": [
+                "MAIN",
+                "GOOD",
+                "AVERAGE",
+                "BAD",
+                "NOTPLAYED"
+              ]
+            }
+          }
+        },
+        "origin": {
+          "Table": {
+            "table": "rankings",
+            "name": "rank"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        {
+          "Custom": {
+            "name": "game_map",
+            "kind": {
+              "Enum": [
+                "BIND",
+                "HAVEN",
+                "SPLIT",
+                "ASCENT",
+                "ICEBOX",
+                "BREEZE",
+                "FRACTURE",
+                "PEARL",
+                "LOTUS",
+                "SUNSET",
+                "ABYSS",
+                "CORRODE",
+                "SUMMIT"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "91a40f08bcb77b0a8e3bd17ef76366efe731e7b2783b5c3cc081484b2cdba926"
+}

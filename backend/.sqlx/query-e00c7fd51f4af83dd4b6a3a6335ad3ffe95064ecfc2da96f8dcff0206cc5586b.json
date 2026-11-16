@@ -1,0 +1,89 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            INSERT INTO rankings (user_id, map, agent, rank)\n            VALUES ($1, $2, $3, $4)\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        {
+          "Custom": {
+            "name": "game_map",
+            "kind": {
+              "Enum": [
+                "BIND",
+                "HAVEN",
+                "SPLIT",
+                "ASCENT",
+                "ICEBOX",
+                "BREEZE",
+                "FRACTURE",
+                "PEARL",
+                "LOTUS",
+                "SUNSET",
+                "ABYSS",
+                "CORRODE",
+                "SUMMIT"
+              ]
+            }
+          }
+        },
+        {
+          "Custom": {
+            "name": "agent",
+            "kind": {
+              "Enum": [
+                "ASTRA",
+                "BREACH",
+                "BRIMSTONE",
+                "CHAMBER",
+                "CLOVE",
+                "CYPHER",
+                "DEADLOCK",
+                "FADE",
+                "GEKKO",
+                "HARBOR",
+                "HUSH",
+                "ISO",
+                "JETT",
+                "KAYO",
+                "KILLJOY",
+                "MIKS",
+                "NEON",
+                "OMEN",
+                "PHOENIX",
+                "RAZE",
+                "REYNA",
+                "SAGE",
+                "SKYE",
+                "SOVA",
+                "TEJO",
+                "VETO",
+                "VIPER",
+                "VYSE",
+                "WAYLAY",
+                "YORU"
+              ]
+            }
+          }
+        },
+        {
+          "Custom": {
+            "name": "agent_rank",
+            "kind": {
+              "Enum": [
+                "MAIN",
+                "GOOD",
+                "AVERAGE",
+                "BAD",
+                "NOTPLAYED"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "e00c7fd51f4af83dd4b6a3a6335ad3ffe95064ecfc2da96f8dcff0206cc5586b"
+}

@@ -1,0 +1,89 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            INSERT INTO rankings (user_id, map, agent, rank)\n            VALUES ($1, $2, $3, $4)\n            ON CONFLICT (user_id, map, agent)\n            DO UPDATE SET rank = EXCLUDED.rank\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        {
+          "Custom": {
+            "name": "game_map",
+            "kind": {
+              "Enum": [
+                "BIND",
+                "HAVEN",
+                "SPLIT",
+                "ASCENT",
+                "ICEBOX",
+                "BREEZE",
+                "FRACTURE",
+                "PEARL",
+                "LOTUS",
+                "SUNSET",
+                "ABYSS",
+                "CORRODE",
+                "SUMMIT"
+              ]
+            }
+          }
+        },
+        {
+          "Custom": {
+            "name": "agent",
+            "kind": {
+              "Enum": [
+                "ASTRA",
+                "BREACH",
+                "BRIMSTONE",
+                "CHAMBER",
+                "CLOVE",
+                "CYPHER",
+                "DEADLOCK",
+                "FADE",
+                "GEKKO",
+                "HARBOR",
+                "HUSH",
+                "ISO",
+                "JETT",
+                "KAYO",
+                "KILLJOY",
+                "MIKS",
+                "NEON",
+                "OMEN",
+                "PHOENIX",
+                "RAZE",
+                "REYNA",
+                "SAGE",
+                "SKYE",
+                "SOVA",
+                "TEJO",
+                "VETO",
+                "VIPER",
+                "VYSE",
+                "WAYLAY",
+                "YORU"
+              ]
+            }
+          }
+        },
+        {
+          "Custom": {
+            "name": "agent_rank",
+            "kind": {
+              "Enum": [
+                "MAIN",
+                "GOOD",
+                "AVERAGE",
+                "BAD",
+                "NOTPLAYED"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "90cc86d901df0ebe0b96f545496045d1e5d1aa5b0ba9a3fad62a6f4bd215a87b"
+}
