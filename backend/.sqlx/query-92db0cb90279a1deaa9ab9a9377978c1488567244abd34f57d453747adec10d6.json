@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "UPDATE sessions\n        SET\n            access_token_hash = $3,\n            refresh_token_hash = $4,\n            refreshed_at = now(),\n            access_expires_at = now() + $5\n        FROM users\n        WHERE\n            users.riot_name = $2\n            AND sessions.user_id = users.id\n            AND sessions.refresh_token_hash = $1\n            AND expires_at > now()\n            AND revoked_at IS NULL\n        RETURNING\n            sessions.id,\n            sessions.created_at,\n            sessions.refreshed_at,\n            sessions.expires_at,\n            sessions.access_expires_at,\n            sessions.access_token_hash,\n            sessions.refresh_token_hash",
+  "query": "UPDATE sessions\n        SET\n            access_token_hash = $3,\n            refresh_token_hash = $4,\n            refreshed_at = now(),\n            access_expires_at = now() + $5\n        WHERE\n            user_id = $2\n            AND refresh_token_hash = $1\n            AND expires_at > now()\n            AND revoked_at IS NULL\n        RETURNING\n            id,\n            created_at,\n            refreshed_at,\n            expires_at,\n            access_expires_at,\n            access_token_hash,\n            refresh_token_hash",
   "describe": {
     "columns": [
       {
@@ -84,7 +84,7 @@
     "parameters": {
       "Left": [
         "Bytea",
-        "Text",
+        "Uuid",
         "Bytea",
         "Bytea",
         "Interval"
@@ -100,5 +100,5 @@
       false
     ]
   },
-  "hash": "039888dd2be8250f4f419bc72257e4fa975f0b7c3f20ccef19bc577dc1b74a34"
+  "hash": "92db0cb90279a1deaa9ab9a9377978c1488567244abd34f57d453747adec10d6"
 }

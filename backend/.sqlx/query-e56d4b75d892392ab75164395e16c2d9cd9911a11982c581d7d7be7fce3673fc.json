@@ -1,11 +1,10 @@
 {
   "db_name": "PostgreSQL",
-  "query": "INSERT INTO users (id, name, riot_name, password_hash) VALUES ($1, $2, $3, $4)",
+  "query": "INSERT INTO users (name, riot_name, password_hash) VALUES ($1, $2, $3)",
   "describe": {
     "columns": [],
     "parameters": {
       "Left": [
-        "Uuid",
         "Varchar",
         "Varchar",
         "Varchar"
@@ -13,5 +12,5 @@
     },
     "nullable": []
   },
-  "hash": "05a170aee927d07017b8ca678a8fa0f9a1caba93405eb19ff09901b46369133c"
+  "hash": "e56d4b75d892392ab75164395e16c2d9cd9911a11982c581d7d7be7fce3673fc"
 }

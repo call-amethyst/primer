@@ -1,0 +1,36 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        DELETE FROM rankings\n        WHERE user_id = $1 AND map = $2\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        {
+          "Custom": {
+            "name": "game_map",
+            "kind": {
+              "Enum": [
+                "BIND",
+                "HAVEN",
+                "SPLIT",
+                "ASCENT",
+                "ICEBOX",
+                "BREEZE",
+                "FRACTURE",
+                "PEARL",
+                "LOTUS",
+                "SUNSET",
+                "ABYSS",
+                "CORRODE",
+                "SUMMIT"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "0126b099e13a8475e75e637cacaad63c4317e8a8c3219f55f82774780114198f"
+}

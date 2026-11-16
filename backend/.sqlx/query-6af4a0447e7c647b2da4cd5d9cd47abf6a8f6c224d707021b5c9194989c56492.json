@@ -1,0 +1,98 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n                INSERT INTO rankings\n                    (user_id, map, agent, rank)\n                VALUES ($1, $2, $3, $4)\n                ON CONFLICT (user_id, map, agent)\n                DO UPDATE SET\n                    rank = EXCLUDED.rank\n                RETURNING (old.id IS NULL) AS \"created!\"\n                ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "created!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        {
+          "Custom": {
+            "name": "game_map",
+            "kind": {
+              "Enum": [
+                "BIND",
+                "HAVEN",
+                "SPLIT",
+                "ASCENT",
+                "ICEBOX",
+                "BREEZE",
+                "FRACTURE",
+                "PEARL",
+                "LOTUS",
+                "SUNSET",
+                "ABYSS",
+                "CORRODE",
+                "SUMMIT"
+              ]
+            }
+          }
+        },
+        {
+          "Custom": {
+            "name": "agent",
+            "kind": {
+              "Enum": [
+                "ASTRA",
+                "BREACH",
+                "BRIMSTONE",
+                "CHAMBER",
+                "CLOVE",
+                "CYPHER",
+                "DEADLOCK",
+                "FADE",
+                "GEKKO",
+                "HARBOR",
+                "HUSH",
+                "ISO",
+                "JETT",
+                "KAYO",
+                "KILLJOY",
+                "MIKS",
+                "NEON",
+                "OMEN",
+                "PHOENIX",
+                "RAZE",
+                "REYNA",
+                "SAGE",
+                "SKYE",
+                "SOVA",
+                "TEJO",
+                "VETO",
+                "VIPER",
+                "VYSE",
+                "WAYLAY",
+                "YORU"
+              ]
+            }
+          }
+        },
+        {
+          "Custom": {
+            "name": "agent_rank",
+            "kind": {
+              "Enum": [
+                "MAIN",
+                "GOOD",
+                "AVERAGE",
+                "BAD",
+                "NOTPLAYED"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "6af4a0447e7c647b2da4cd5d9cd47abf6a8f6c224d707021b5c9194989c56492"
+}

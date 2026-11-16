@@ -1,0 +1,152 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            SELECT agent, rank\n            FROM rankings\n            WHERE user_id = $1\n              AND map = $2\n              AND agent = $3\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "agent",
+        "type_info": {
+          "Custom": {
+            "name": "agent",
+            "kind": {
+              "Enum": [
+                "ASTRA",
+                "BREACH",
+                "BRIMSTONE",
+                "CHAMBER",
+                "CLOVE",
+                "CYPHER",
+                "DEADLOCK",
+                "FADE",
+                "GEKKO",
+                "HARBOR",
+                "HUSH",
+                "ISO",
+                "JETT",
+                "KAYO",
+                "KILLJOY",
+                "MIKS",
+                "NEON",
+                "OMEN",
+                "PHOENIX",
+                "RAZE",
+                "REYNA",
+                "SAGE",
+                "SKYE",
+                "SOVA",
+                "TEJO",
+                "VETO",
+                "VIPER",
+                "VYSE",
+                "WAYLAY",
+                "YORU"
+              ]
+            }
+          }
+        },
+        "origin": {
+          "Table": {
+            "table": "rankings",
+            "name": "agent"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "rank",
+        "type_info": {
+          "Custom": {
+            "name": "agent_rank",
+            "kind": {
+              "Enum": [
+                "MAIN",
+                "GOOD",
+                "AVERAGE",
+                "BAD",
+                "NOTPLAYED"
+              ]
+            }
+          }
+        },
+        "origin": {
+          "Table": {
+            "table": "rankings",
+            "name": "rank"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        {
+          "Custom": {
+            "name": "game_map",
+            "kind": {
+              "Enum": [
+                "BIND",
+                "HAVEN",
+                "SPLIT",
+                "ASCENT",
+                "ICEBOX",
+                "BREEZE",
+                "FRACTURE",
+                "PEARL",
+                "LOTUS",
+                "SUNSET",
+                "ABYSS",
+                "CORRODE",
+                "SUMMIT"
+              ]
+            }
+          }
+        },
+        {
+          "Custom": {
+            "name": "agent",
+            "kind": {
+              "Enum": [
+                "ASTRA",
+                "BREACH",
+                "BRIMSTONE",
+                "CHAMBER",
+                "CLOVE",
+                "CYPHER",
+                "DEADLOCK",
+                "FADE",
+                "GEKKO",
+                "HARBOR",
+                "HUSH",
+                "ISO",
+                "JETT",
+                "KAYO",
+                "KILLJOY",
+                "MIKS",
+                "NEON",
+                "OMEN",
+                "PHOENIX",
+                "RAZE",
+                "REYNA",
+                "SAGE",
+                "SKYE",
+                "SOVA",
+                "TEJO",
+                "VETO",
+                "VIPER",
+                "VYSE",
+                "WAYLAY",
+                "YORU"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "667d3221f024520ded180555e35c6b28a5ab3d94bd429f04218f955823e8e469"
+}
